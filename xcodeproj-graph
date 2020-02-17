@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+if [ -z $1 ]; then
+	file=$(find *.xcodeproj -name project.pbxproj)
+else
+	file=$(find "$1" -name project.pbxproj)
+fi
+program="$(dirname $0)"/targets.jq
+dot -Tpng <(plutil -convert json -o - -- $file | jq -rf $program) |
+	open -Wfa preview
